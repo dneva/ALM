@@ -1,7 +1,6 @@
 package com.example.alm_gui;
 
 import com.example.alm_gui.Classes.*;
-import com.example.alm_gui.PostgreConnection;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -142,7 +141,7 @@ public class MainController implements Initializable {
                             try {
                                 root = loader.load();
                                 TestCaseController testCaseController = loader.getController();
-                                testCaseController.initialization(postgreConnection, postgreConnection.findTestCase(rowData.getId(), rowData.getModify_item()), user);
+                                testCaseController.initialization(postgreConnection, postgreConnection.findTestCase(rowData.getId(), rowData.getModify_item()), user, "MainScene.fxml");
 
                                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                                 scene = new Scene(root);
@@ -179,6 +178,7 @@ public class MainController implements Initializable {
         String[] items = {"Requirement", "Bug", "Issue", "Task", "Test Case", "Test Plan"};
         itemChoiceBox.getItems().addAll(items);
         itemChoiceBox.setValue("Requirement");
+
     }
 
     public void onCreateButtonClick(ActionEvent event) {
@@ -246,7 +246,7 @@ public class MainController implements Initializable {
                 try {
                     root = loader.load();
                     TestCaseController testCaseController = loader.getController();
-                    testCaseController.initialization(postgreConnection, new TestCase(), user);
+                    testCaseController.initialization(postgreConnection, new TestCase(), user, "MainScene.fxml");
                     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     scene = new Scene(root);
                     stage.setScene(scene);

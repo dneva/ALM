@@ -4,6 +4,8 @@ public class PlanCase {
     private int id_test_plan;
     private int id_test_case;
     private String execution;
+
+    public PlanCase(){};
     public PlanCase(int id_test_plan, int id_test_case, String execution){
         this.id_test_case=id_test_case;
         this.id_test_plan=id_test_plan;

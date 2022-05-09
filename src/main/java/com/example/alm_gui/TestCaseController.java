@@ -1,26 +1,32 @@
 package com.example.alm_gui;
 
 import com.example.alm_gui.Classes.Item;
-import com.example.alm_gui.Classes.Requirement;
 import com.example.alm_gui.Classes.TestCase;
+import com.example.alm_gui.Classes.TestPlan;
 import com.example.alm_gui.Classes.User;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.kohsuke.github.*;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
-public class TestCaseController {
+public class TestCaseController extends Application {
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -44,13 +50,26 @@ public class TestCaseController {
     TextField fieldPriority;
     @FXML
     TextField fieldAutoStatus;
+    @FXML
+    TextField fieldGitUser;
+    @FXML
+    TextField fieldGitPassword;
+    @FXML
+    ChoiceBox<String> choiceBoxRepository;
+    @FXML
+    ListView<Hyperlink> listCommit;
+    @FXML
+    Hyperlink linkCommit;
     private TestCase testCase;
     private PostgreConnection postgreConnection;
     private User user;
-    public void initialization(PostgreConnection post,TestCase tc,User u){
+    private String parentFxml;
+    private TestPlan testPlan;
+    public void initialization(PostgreConnection post,TestCase tc,User u, String fxml){
         testCase=tc;
         postgreConnection=post;
         user=u;
+        parentFxml =fxml;
 
         labelId_requirement.setText("ID: "+String.valueOf(testCase.getId_item()));
         textSteps.setText(testCase.getSteps());
@@ -62,6 +81,42 @@ public class TestCaseController {
         fieldAssign.setText(postgreConnection.findUser(testCase.getAssign()).getLogin());
         fieldPriority.setText(String.valueOf(testCase.getPriority()));
         fieldAutoStatus.setText(testCase.getAuto_status());
+        linkCommit.setText(testCase.getDev());
+        linkCommit.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                getHostServices().showDocument(linkCommit.getText());
+            }
+        });
+
+    }
+    public void initialization(PostgreConnection post,TestCase tc,User u, String fxml, TestPlan tp){
+        testCase=tc;
+        postgreConnection=post;
+        user=u;
+        parentFxml =fxml;
+        testPlan = tp;
+
+        labelId_requirement.setText("ID: "+String.valueOf(testCase.getId_item()));
+        textSteps.setText(testCase.getSteps());
+        fieldTime.setText("Изменено "+ testCase.getTime());
+        fieldChanged.setText(postgreConnection.findUser(testCase.getChanged_by()).getLogin());
+        fieldTitle.setText(testCase.getTitle());
+        fieldVersion.setText(testCase.getVersion());
+        fieldState.setText(testCase.getState());
+        fieldAssign.setText(postgreConnection.findUser(testCase.getAssign()).getLogin());
+        fieldPriority.setText(String.valueOf(testCase.getPriority()));
+        fieldAutoStatus.setText(testCase.getAuto_status());
+        linkCommit.setText(testCase.getDev());
+        linkCommit.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                getHostServices().showDocument(linkCommit.getText());
+            }
+        });
+
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -78,6 +133,7 @@ public class TestCaseController {
         testCase.setAssign(postgreConnection.findUser(fieldAssign.getText()).getId());
         testCase.setPriority(Integer.parseInt(fieldPriority.getText()));
         testCase.setAuto_status(fieldAutoStatus.getText());
+        testCase.setDev(linkCommit.getText());
         if (testCase.getId_item()==0)
         {
             Item item = new Item(df.format(date),5,df.format(date));
@@ -88,11 +144,20 @@ public class TestCaseController {
     }
     @FXML
     protected void onBackButtonClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScene.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(parentFxml));
         root = loader.load();
-        MainController mainController = loader.getController();
-        mainController.helloTitle(user);
-        mainController.tableFill(postgreConnection);
+        if (parentFxml == "TestPlanScene.fxml")
+        {
+            TestPlanController testPlanController = loader.getController();
+            testPlanController.initialization(postgreConnection, testPlan, user);
+
+        } else
+        {
+            MainController mainController = loader.getController();
+            mainController.helloTitle(user);
+            mainController.tableFill(postgreConnection);
+        }
+
 
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -114,6 +179,63 @@ public class TestCaseController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+    }
+    @FXML
+    protected void onButtonGitLoginClick(ActionEvent event) throws IOException {
+
+        String gitLogin = fieldGitUser.getText();
+        String gitPass = fieldGitPassword.getText();
+        GitHub github = new GitHubBuilder().withPassword(gitLogin,gitPass).build();
+        //System.out.println("Connection Success!!");
+        GHUser gitUser = github.getUser(gitLogin);
+        Iterator<GHRepository> itr = gitUser.listRepositories().iterator();
+        while (itr.hasNext()) {
+            GHRepository r = itr.next();
+            choiceBoxRepository.getItems().add(r.getName());
+        }
+        choiceBoxRepository.setOnAction((e) -> {
+            String selectedItem = choiceBoxRepository.getSelectionModel().getSelectedItem();
+            try {
+                GHRepository rep=gitUser.getRepository(selectedItem);
+                //System.out.println(rep.getUrl().toString());
+                List<Hyperlink> comm=new ArrayList<>();
+                for(GHCommit c : rep.listCommits().toList()){
+                    Hyperlink h = new Hyperlink(c.getHtmlUrl().toString());
+                    h.setOnAction(new EventHandler<ActionEvent>() {
+
+                        @Override
+                        public void handle(ActionEvent t) {
+                            getHostServices().showDocument(h.getText());
+                        }
+                    });
+                    comm.add(h);
+                }
+                ObservableList<Hyperlink> commits = FXCollections.observableArrayList(comm);
+                listCommit.setItems(commits);
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+
+    }
+    @FXML
+    protected void onButtonCommitClick(ActionEvent event) throws IOException{
+        linkCommit.setText(listCommit.getSelectionModel().getSelectedItem().getText());
+        linkCommit.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                getHostServices().showDocument(linkCommit.getText());
+            }
+        });
+
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
 
     }
 }

@@ -3,13 +3,18 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="627.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.alm_gui.IssueController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.alm_gui.IssueController">
    <children>
       <VBox prefHeight="64.0" prefWidth="627.0" style="-fx-background-color: purple;">
          <children>
@@ -26,170 +31,206 @@
             </Label>
          </children>
       </VBox>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="634.0">
-         <children>
-            <VBox prefHeight="429.0" prefWidth="339.0">
-               <children>
-                  <Label fx:id="labelId_requirement" text="Requirement">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label text="Описание">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </Label>
-                  <TextArea fx:id="textDescription" prefHeight="151.0" prefWidth="334.0" wrapText="true">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </TextArea>
-                  <Label text="Шаги воспроизведения">
-                     <VBox.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextArea fx:id="textSteps" prefHeight="151.0" prefWidth="334.0" wrapText="true">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" />
-                     </VBox.margin>
-                  </TextArea>
-                  <Label fx:id="fieldTime" text="Label" textFill="#949494">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </Label>
-                  <Label fx:id="fieldChanged" text="Label" textFill="#949494">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </VBox>
-            <VBox prefHeight="429.0" prefWidth="251.0">
-               <children>
-                  <Label text="Название">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-                  <TextField fx:id="fieldTitle">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Версия">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="fieldVersion">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Статус">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="fieldState">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Назначено на">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="fieldAssign">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Тип проблемы">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="fieldType">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Найдено в сборке">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="fieldFoundBuild">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Приоритет">
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="fieldPriority">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Button fx:id="buttonSave" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="44.0" prefWidth="170.0" text="Сохранить">
-                     <VBox.margin>
-                        <Insets left="20.0" right="20.0" top="5.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Button>
-                  <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="25.0" prefWidth="104.0" text="&lt;&lt; Назад">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <VBox.margin>
-                        <Insets left="50.0" right="30.0" top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="45.0" prefWidth="70.0" text="Удалить">
-                     <VBox.margin>
-                        <Insets left="160.0" top="15.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-               <padding>
-                  <Insets left="30.0" />
-               </padding>
-            </VBox>
-         </children>
-      </HBox>
+      <TabPane prefHeight="431.0" prefWidth="616.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Основное">
+               <content>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="638.0">
+                     <children>
+                        <VBox prefHeight="364.0" prefWidth="339.0">
+                           <children>
+                              <Label fx:id="labelId_requirement" text="Requirement">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Описание">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </Label>
+                              <TextArea fx:id="textDescription" prefHeight="151.0" prefWidth="334.0" wrapText="true">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </TextArea>
+                              <Label text="Шаги воспроизведения">
+                                 <VBox.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextArea fx:id="textSteps" prefHeight="120.0" prefWidth="334.0" wrapText="true">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" />
+                                 </VBox.margin>
+                              </TextArea>
+                              <Label fx:id="fieldTime" text="Label" textFill="#949494">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </Label>
+                              <Label fx:id="fieldChanged" text="Label" textFill="#949494">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="389.0" prefWidth="256.0">
+                           <children>
+                              <Label text="Название">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="fieldTitle">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label text="Версия">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="fieldVersion">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label text="Статус">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="fieldState">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label text="Назначено на">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="fieldAssign">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label text="Тип проблемы">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="fieldType">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label text="Найдено в сборке">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="fieldFoundBuild">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Label text="Приоритет">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="fieldPriority">
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <Button fx:id="buttonSave" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="44.0" prefWidth="170.0" text="Сохранить">
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" top="5.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                              </Button>
+                              <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="25.0" prefWidth="104.0" text="&lt;&lt; Назад">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <VBox.margin>
+                                    <Insets left="50.0" right="30.0" top="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="45.0" prefWidth="70.0" text="Удалить">
+                                 <VBox.margin>
+                                    <Insets left="160.0" top="15.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets left="30.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </content>
+            </Tab>
+          <Tab text="Связи">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TableView layoutX="35.0" layoutY="48.0" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="История">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView layoutX="53.0" layoutY="60.0" prefHeight="200.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="C1" />
+                            <TableColumn prefWidth="75.0" text="C2" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </VBox>

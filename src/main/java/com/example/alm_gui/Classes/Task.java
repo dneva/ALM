@@ -14,7 +14,11 @@ public class Task {
     private String version;
     private String state;
     private int assign;
-    public Task(){this.id_item=0;}
+    public Task(){
+        this.id_item=0;
+        this.expected_resolve="";
+        this.resolve="";
+    }
     public Task( int id_item, double original_effort, double remaining_effort, String expected_resolve,
     String resolve,String description, String dev, String time, int changed_by, String title, String version,
     String state, int assign) {

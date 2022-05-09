@@ -2,6 +2,7 @@ module com.example.alm_gui {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires org.kohsuke.github.api;
 
 
     opens com.example.alm_gui to javafx.fxml;

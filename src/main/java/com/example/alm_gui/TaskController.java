@@ -1,26 +1,31 @@
 package com.example.alm_gui;
 
 import com.example.alm_gui.Classes.Item;
-import com.example.alm_gui.Classes.Requirement;
 import com.example.alm_gui.Classes.Task;
 import com.example.alm_gui.Classes.User;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.kohsuke.github.*;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
-public class TaskController {
+public class TaskController extends Application {
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -48,6 +53,16 @@ public class TaskController {
     TextField fieldExpectedResolve;
     @FXML
     TextField fieldResolve;
+    @FXML
+    TextField fieldGitUser;
+    @FXML
+    TextField fieldGitPassword;
+    @FXML
+    ChoiceBox<String> choiceBoxRepository;
+    @FXML
+    ListView<Hyperlink> listCommit;
+    @FXML
+    Hyperlink linkCommit;
     private Task task;
     private PostgreConnection postgreConnection;
     private User user;
@@ -68,6 +83,14 @@ public class TaskController {
         fieldRemainingEffort.setText(String.valueOf(task.getRemaining_effort()));
         fieldExpectedResolve.setText(task.getExpected_resolve());
         fieldResolve.setText(task.getResolve());
+        linkCommit.setText(task.getDev());
+        linkCommit.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                getHostServices().showDocument(linkCommit.getText());
+            }
+        });
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -86,6 +109,7 @@ public class TaskController {
         task.setRemaining_effort(Double.parseDouble(fieldRemainingEffort.getText()));
         task.setExpected_resolve(fieldExpectedResolve.getText());
         task.setResolve(fieldResolve.getText());
+        task.setDev(linkCommit.getText());
         if (task.getId_item()==0)
         {
             Item item = new Item(df.format(date),4,df.format(date));
@@ -122,6 +146,64 @@ public class TaskController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+    }
+
+    @FXML
+    protected void onButtonGitLoginClick(ActionEvent event) throws IOException {
+
+        String gitLogin = fieldGitUser.getText();
+        String gitPass = fieldGitPassword.getText();
+        GitHub github = new GitHubBuilder().withPassword(gitLogin,gitPass).build();
+        //System.out.println("Connection Success!!");
+        GHUser gitUser = github.getUser(gitLogin);
+        Iterator<GHRepository> itr = gitUser.listRepositories().iterator();
+        while (itr.hasNext()) {
+            GHRepository r = itr.next();
+            choiceBoxRepository.getItems().add(r.getName());
+        }
+        choiceBoxRepository.setOnAction((e) -> {
+            String selectedItem = choiceBoxRepository.getSelectionModel().getSelectedItem();
+            try {
+                GHRepository rep=gitUser.getRepository(selectedItem);
+                //System.out.println(rep.getUrl().toString());
+                List<Hyperlink> comm=new ArrayList<>();
+                for(GHCommit c : rep.listCommits().toList()){
+                    Hyperlink h = new Hyperlink(c.getHtmlUrl().toString());
+                    h.setOnAction(new EventHandler<ActionEvent>() {
+
+                        @Override
+                        public void handle(ActionEvent t) {
+                            getHostServices().showDocument(h.getText());
+                        }
+                    });
+                    comm.add(h);
+                }
+                ObservableList<Hyperlink> commits = FXCollections.observableArrayList(comm);
+                listCommit.setItems(commits);
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+
+    }
+    @FXML
+    protected void onButtonCommitClick(ActionEvent event) throws IOException{
+        linkCommit.setText(listCommit.getSelectionModel().getSelectedItem().getText());
+        linkCommit.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent t) {
+                getHostServices().showDocument(linkCommit.getText());
+            }
+        });
+
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
 
     }
 }

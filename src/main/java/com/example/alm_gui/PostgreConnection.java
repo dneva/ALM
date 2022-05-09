@@ -404,7 +404,7 @@ public class PostgreConnection {
     }
 
     public int deletePlanCase(long id) {
-        String SQL = "DELETE FROM public.test_plan WHERE id = ?";
+        String SQL = "DELETE FROM public.plan_case WHERE id_plan_case= ?";
 
         int affectedrows = 0;
         try (Connection connection = DriverManager.getConnection(url,user,password);
@@ -642,6 +642,7 @@ public class PostgreConnection {
                     bug.setLocalization(rs.getString("localization"));
                     bug.setPriority(rs.getInt("priority"));
                     bug.setSeverity(rs.getInt("severity"));
+                    bug.setDev(rs.getString("dev"));
 
                 }
                 catch (Exception ex)
@@ -720,6 +721,7 @@ public class PostgreConnection {
                     task.setDescription(rs.getString("description"));
                     task.setExpected_resolve(rs.getString("expected_resolve"));
                     task.setResolve(rs.getString("resolve"));
+                    task.setDev(rs.getString("dev"));
 
                 }
                 catch (Exception ex)
@@ -757,6 +759,45 @@ public class PostgreConnection {
                     testCase.setPriority(rs.getInt("priority"));
                     testCase.setAuto_status(rs.getString("auto_status"));
                     testCase.setSteps(rs.getString("steps"));
+                    testCase.setDev(rs.getString("dev"));
+
+                }
+                catch (Exception ex)
+                {
+                    System.out.println(ex);
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return testCase;
+    }
+    public TestCase findTestCase(int id_item) {
+
+        String SQL = "SELECT * FROM public.test_case " +
+                "WHERE id_item = ? order by time desc " +
+                "limit 1";
+        TestCase testCase = new TestCase();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+            pstmt.setInt(1, id_item);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+
+                try {
+                    testCase.setId(rs.getInt("id_case"));
+                    testCase.setId_item(id_item);
+                    testCase.setTime(rs.getString("time"));
+                    testCase.setTitle(rs.getString("title"));
+                    testCase.setVersion(rs.getString("version"));
+                    testCase.setState(rs.getString("state"));
+                    testCase.setAssign(rs.getInt("assign"));
+                    testCase.setChanged_by(rs.getInt("changed_by"));
+                    testCase.setPriority(rs.getInt("priority"));
+                    testCase.setAuto_status(rs.getString("auto_status"));
+                    testCase.setSteps(rs.getString("steps"));
+                    testCase.setDev(rs.getString("dev"));
 
                 }
                 catch (Exception ex)
@@ -801,6 +842,56 @@ public class PostgreConnection {
             System.out.println(ex.getMessage());
         }
         return testPlan;
+    }
+    public ObservableList<TestCaseItem> getTestCaseItems(int id) {
+
+        String SQL = "SELECT id_item,title,execution FROM public.\"TestPlanView\" " +
+                "WHERE id_test_plan = ?";
+        ObservableList<TestCaseItem> testCaseItems = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                TestCaseItem testCaseItem = new TestCaseItem(id,rs.getInt("id_item"),
+                        rs.getString("title"), rs.getString("execution"));
+                testCaseItems.add(testCaseItem);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return testCaseItems;
+    }
+
+    public PlanCase findPlanCase(int id_test_plan, int id_test_case) {
+
+        String SQL = "SELECT * FROM public.plan_case " +
+                "WHERE id_test_plan = ? AND id_test_case = ?";
+        PlanCase pc = new PlanCase();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+            pstmt.setInt(1, id_test_plan);
+            pstmt.setInt(2,id_test_case);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+
+                try {
+                    pc.setId(rs.getInt("id_plan_case"));
+                    pc.setId_test_plan(id_test_plan);
+                    pc.setId_test_case(id_test_case);
+                    pc.setExecution(rs.getString("execution"));
+                }
+                catch (Exception ex)
+                {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return pc;
     }
 }
 

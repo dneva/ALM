@@ -13,7 +13,13 @@ public class Requirement {
     private String version;
     private String state;
     private int assign;
-    public Requirement() {this.id_item=0;}
+    public Requirement() {
+        this.id_item=0;
+        this.analysis_estimate="";
+        this.development_estimate="";
+        this.testing_estimate="";
+        this.release_date="";
+    }
     public Requirement(int id_item, String description, String analysis_estimate, String development_estimate,
     String testing_estimate, String release_date, String time, int changed_by, String title,
     String version, String state, int assign)
