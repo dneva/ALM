@@ -50,6 +50,22 @@ public class TestPlanController {
     Button addTestButton;
     @FXML
     Button deleteTestButton;
+    @FXML
+    private TableColumn<LinkItem, Integer> columnIDLink1;
+    @FXML
+    private TableColumn<LinkItem, Integer> columnIDLink2;
+    @FXML
+    private TableColumn<LinkItem, String> columnTypeLink;
+    @FXML
+    TableView <LinkItem> tableLinks;
+    @FXML
+    Button buttonDeleteLink;
+    @FXML
+    Button buttonAddLink;
+    @FXML
+    TextField fieldIDLink;
+    @FXML
+    TextField fieldTypeLink;
     private TestPlan testPlan;
     private PostgreConnection postgreConnection;
     private User user;
@@ -102,7 +118,15 @@ public class TestPlanController {
                 });
             return row;
         });
+        tableFill();
 
+    }
+    public void tableFill() {
+        ObservableList<LinkItem> linkItems = postgreConnection.getLinkItems(testPlan.getId_item());
+        columnIDLink1.setCellValueFactory(new PropertyValueFactory<>("Id1"));
+        columnIDLink2.setCellValueFactory(new PropertyValueFactory<>("Id2"));
+        columnTypeLink.setCellValueFactory(new PropertyValueFactory<>("Type"));
+        tableLinks.setItems(linkItems);
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -180,5 +204,16 @@ public class TestPlanController {
         postgreConnection.deletePlanCase(postgreConnection.findPlanCase(testPlan.getId_item(),Integer.parseInt(fieldIDTest.getText())).getId());
         testCaseItems = postgreConnection.getTestCaseItems(testPlan.getId_item());
         tableCases.setItems(testCaseItems);
+    }
+    @FXML
+    protected void onButtonAddLinkClick(ActionEvent event) throws IOException{
+        Link link = new Link(testPlan.getId_item(),Integer.parseInt(fieldIDLink.getText()),fieldTypeLink.getText());
+        postgreConnection.insertLink(link);
+        tableFill();
+    }
+    @FXML
+    protected void onButtonDeleteLinkClick(ActionEvent event) throws IOException{
+        postgreConnection.deleteLink(postgreConnection.findLink(testPlan.getId_item(),Integer.parseInt(fieldIDLink.getText())));
+        tableFill();
     }
 }

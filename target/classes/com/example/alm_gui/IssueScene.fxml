@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.alm_gui.IssueController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="501.0" prefWidth="647.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.alm_gui.IssueController">
    <children>
       <VBox prefHeight="64.0" prefWidth="627.0" style="-fx-background-color: purple;">
          <children>
@@ -31,7 +31,7 @@
             </Label>
          </children>
       </VBox>
-      <TabPane prefHeight="431.0" prefWidth="616.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="431.0" prefWidth="649.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Основное">
                <content>
@@ -202,16 +202,23 @@
                   </HBox>
                </content>
             </Tab>
-          <Tab text="Связи">
+            <Tab text="Связи">
                <content>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                  <AnchorPane prefHeight="402.0" prefWidth="641.0">
                      <children>
-                        <TableView layoutX="35.0" layoutY="48.0" prefHeight="200.0" prefWidth="200.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
+                        <TableView fx:id="tableLinks" layoutX="14.0" layoutY="14.0" prefHeight="307.0" prefWidth="309.0">
+                           <columns>
+                              <TableColumn fx:id="columnIDLink1" prefWidth="86.6666898727417" text="ID Родителя" />
+                              <TableColumn fx:id="columnIDLink2" prefWidth="86.6666898727417" text="ID Ребенка" />
+                              <TableColumn fx:id="columnTypeLink" prefWidth="133.33334859212238" text="Тип связи" />
+                           </columns>
                         </TableView>
+                        <Label layoutX="326.0" layoutY="14.0" text="ID:" />
+                        <TextField fx:id="fieldIDLink" layoutX="393.0" layoutY="12.0" />
+                        <Label layoutX="326.0" layoutY="35.0" text="Тип связи:" AnchorPane.topAnchor="45.0" />
+                        <TextField fx:id="fieldTypeLink" layoutX="393.0" layoutY="41.0" />
+                        <Button fx:id="buttonAddLink" layoutX="551.0" layoutY="12.0" mnemonicParsing="false" onAction="#onButtonAddLinkClick" prefHeight="23.0" prefWidth="69.0" text="Добавить" />
+                        <Button fx:id="buttonDeleteLink" layoutX="552.0" layoutY="41.0" mnemonicParsing="false" onAction="#onButtonDeleteLinkClick" prefHeight="25.0" prefWidth="68.0" text="Удалить" />
                      </children>
                   </AnchorPane>
                </content>

@@ -4,6 +4,7 @@ public class Link {
     private int id_item1;
     private int id_item2;
     private String link_type;
+    public Link(){};
     public Link(int id_item1, int id_item2, String link_type){
         this.id_item1=id_item1;
         this.id_item2=id_item2;

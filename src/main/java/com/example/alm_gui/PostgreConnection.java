@@ -78,19 +78,19 @@ public class PostgreConnection {
 
             pstmt.setInt(1, req.getId_item());
             pstmt.setString(2, req.getDescription());
-            if (!Objects.equals(req.getAnalysis_estimate(), ""))
+            if (!Objects.equals(req.getAnalysis_estimate(), "") && !Objects.equals(req.getAnalysis_estimate(), null))
                 pstmt.setTimestamp(3, Timestamp.valueOf(req.getAnalysis_estimate()));
             else pstmt.setNull(3,Types.TIMESTAMP);
 
-            if (!Objects.equals(req.getDevelopment_estimate(), ""))
+            if (!Objects.equals(req.getDevelopment_estimate(), "") && !Objects.equals(req.getAnalysis_estimate(), null))
                 pstmt.setTimestamp(4, Timestamp.valueOf(req.getDevelopment_estimate()));
             else pstmt.setNull(4,Types.TIMESTAMP);
 
-            if (!Objects.equals(req.getTesting_estimate(), ""))
+            if (!Objects.equals(req.getTesting_estimate(), "") && !Objects.equals(req.getAnalysis_estimate(), null))
                 pstmt.setTimestamp(5, Timestamp.valueOf(req.getTesting_estimate()));
             else pstmt.setNull(5,Types.TIMESTAMP);
 
-            if (!Objects.equals(req.getRelease_date(), ""))
+            if (!Objects.equals(req.getRelease_date(), "") && !Objects.equals(req.getAnalysis_estimate(), null))
                 pstmt.setTimestamp(6,Timestamp.valueOf(req.getRelease_date()));
             else pstmt.setNull(6,Types.TIMESTAMP);
 
@@ -212,11 +212,11 @@ public class PostgreConnection {
             pstmt.setInt(1, task.getId_item());
             pstmt.setDouble(2, task.getOriginal_effort());
             pstmt.setDouble(3, task.getRemaining_effort());
-            if (!Objects.equals(task.getResolve(), ""))
+            if (!Objects.equals(task.getExpected_resolve(), "") && !Objects.equals(task.getExpected_resolve(), null))
                 pstmt.setTimestamp(4, Timestamp.valueOf(task.getExpected_resolve()));
             else pstmt.setNull(4,Types.TIMESTAMP);
 
-            if (!Objects.equals(task.getResolve(), ""))
+            if (!Objects.equals(task.getResolve(), "") && !Objects.equals(task.getExpected_resolve(), null))
                 pstmt.setTimestamp(5, Timestamp.valueOf(task.getResolve()));
             else pstmt.setNull(5,Types.TIMESTAMP);
 
@@ -314,7 +314,7 @@ public class PostgreConnection {
         return id;
     }
     public long insertLink(Link link){
-        String SQL = "INSERT INTO public.link(id_item1, id_item2, link_type)" +
+        String SQL = "INSERT INTO public.link(id_item1, id_item2, link_type) " +
                 "VALUES (?, ?, ?)";
         long id = 0;
         try (Connection connection = DriverManager.getConnection(url,user,password);
@@ -387,7 +387,7 @@ public class PostgreConnection {
     }
 
     public int deleteLink(long id) {
-        String SQL = "DELETE FROM public.link WHERE id = ?";
+        String SQL = "DELETE FROM public.link WHERE id_link = ?";
 
         int affectedrows = 0;
         try (Connection connection = DriverManager.getConnection(url,user,password);
@@ -892,6 +892,54 @@ public class PostgreConnection {
             System.out.println(ex.getMessage());
         }
         return pc;
+    }
+    public ObservableList<LinkItem> getLinkItems(int id) {
+
+        String SQL = "SELECT * FROM public.Link "+"WHERE id_item1 = ? or id_item2 = ?";
+        ObservableList<LinkItem> linkItems = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL))
+            {
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                LinkItem linkItem = new LinkItem(rs.getInt("id_item1"),rs.getInt("id_item2"),
+                        rs.getString("link_type"));
+                linkItems.add(linkItem);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return linkItems;
+    }
+    public int findLink(int id1, int id2) {
+
+        String SQL = "SELECT * FROM public.link " +
+                "WHERE (id_item1 = ? AND id_item2 = ?) OR (id_item2 = ? AND id_item1 = ?)";
+        int id=0;
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+            pstmt.setInt(1, id1);
+            pstmt.setInt(2, id2);
+            pstmt.setInt(3, id2);
+            pstmt.setInt(4, id1);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+
+                try {
+                    id=rs.getInt("id_link");
+                }
+                catch (Exception ex)
+                {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return id;
     }
 }
 

@@ -1,8 +1,7 @@
 package com.example.alm_gui;
 
-import com.example.alm_gui.Classes.Item;
-import com.example.alm_gui.Classes.Requirement;
-import com.example.alm_gui.Classes.User;
+import com.example.alm_gui.Classes.*;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -45,6 +45,22 @@ public class RequirementController {
     TextField fieldTest;
     @FXML
     TextField fieldRelease;
+    @FXML
+    private TableColumn<LinkItem, Integer> columnIDLink1;
+    @FXML
+    private TableColumn<LinkItem, Integer> columnIDLink2;
+    @FXML
+    private TableColumn<LinkItem, String> columnTypeLink;
+    @FXML
+    TableView <LinkItem> tableLinks;
+    @FXML
+    Button buttonDeleteLink;
+    @FXML
+    Button buttonAddLink;
+    @FXML
+    TextField fieldIDLink;
+    @FXML
+    TextField fieldTypeLink;
     private Requirement requirement;
     private PostgreConnection postgreConnection;
     private User user;
@@ -65,6 +81,14 @@ public class RequirementController {
         fieldDevelopment.setText(requirement.getDevelopment_estimate());
         fieldTest.setText(requirement.getTesting_estimate());
         fieldRelease.setText(requirement.getRelease_date());
+        tableFill();
+    }
+    public void tableFill() {
+        ObservableList<LinkItem> linkItems = postgreConnection.getLinkItems(requirement.getId_item());
+        columnIDLink1.setCellValueFactory(new PropertyValueFactory<>("Id1"));
+        columnIDLink2.setCellValueFactory(new PropertyValueFactory<>("Id2"));
+        columnTypeLink.setCellValueFactory(new PropertyValueFactory<>("Type"));
+        tableLinks.setItems(linkItems);
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -120,5 +144,16 @@ public class RequirementController {
         stage.setScene(scene);
         stage.show();
 
+    }
+    @FXML
+    protected void onButtonAddLinkClick(ActionEvent event) throws IOException{
+        Link link = new Link(requirement.getId_item(),Integer.parseInt(fieldIDLink.getText()),fieldTypeLink.getText());
+        postgreConnection.insertLink(link);
+        tableFill();
+    }
+    @FXML
+    protected void onButtonDeleteLinkClick(ActionEvent event) throws IOException{
+        postgreConnection.deleteLink(postgreConnection.findLink(requirement.getId_item(),Integer.parseInt(fieldIDLink.getText())));
+        tableFill();
     }
 }

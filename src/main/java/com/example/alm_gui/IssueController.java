@@ -1,18 +1,15 @@
 package com.example.alm_gui;
 
-import com.example.alm_gui.Classes.Issue;
-import com.example.alm_gui.Classes.Item;
-import com.example.alm_gui.Classes.Requirement;
-import com.example.alm_gui.Classes.User;
+import com.example.alm_gui.Classes.*;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -48,6 +45,23 @@ public class IssueController {
     TextField fieldPriority;
     @FXML
     TextArea textSteps;
+    @FXML
+    private TableColumn<LinkItem, Integer> columnIDLink1;
+    @FXML
+    private TableColumn<LinkItem, Integer> columnIDLink2;
+    @FXML
+    private TableColumn<LinkItem, String> columnTypeLink;
+    @FXML
+    TableView<LinkItem> tableLinks;
+    @FXML
+    Button buttonDeleteLink;
+    @FXML
+    Button buttonAddLink;
+    @FXML
+    TextField fieldIDLink;
+    @FXML
+    TextField fieldTypeLink;
+
     private Issue issue;
     private PostgreConnection postgreConnection;
     private User user;
@@ -68,6 +82,14 @@ public class IssueController {
         fieldFoundBuild.setText(issue.getFound_build());
         fieldPriority.setText(String.valueOf(issue.getPriority()));
         textSteps.setText(issue.getSteps());
+        tableFill();
+    }
+    public void tableFill() {
+        ObservableList<LinkItem> linkItems = postgreConnection.getLinkItems(issue.getId_item());
+        columnIDLink1.setCellValueFactory(new PropertyValueFactory<>("Id1"));
+        columnIDLink2.setCellValueFactory(new PropertyValueFactory<>("Id2"));
+        columnTypeLink.setCellValueFactory(new PropertyValueFactory<>("Type"));
+        tableLinks.setItems(linkItems);
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -123,5 +145,16 @@ public class IssueController {
         stage.setScene(scene);
         stage.show();
 
+    }
+    @FXML
+    protected void onButtonAddLinkClick(ActionEvent event) throws IOException{
+        Link link = new Link(issue.getId_item(),Integer.parseInt(fieldIDLink.getText()),fieldTypeLink.getText());
+        postgreConnection.insertLink(link);
+        tableFill();
+    }
+    @FXML
+    protected void onButtonDeleteLinkClick(ActionEvent event) throws IOException{
+        postgreConnection.deleteLink(postgreConnection.findLink(issue.getId_item(),Integer.parseInt(fieldIDLink.getText())));
+        tableFill();
     }
 }

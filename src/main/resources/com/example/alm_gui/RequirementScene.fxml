@@ -209,20 +209,27 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Связи">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <Tab text="Связи">
+               <content>
+                  <AnchorPane>
                      <children>
-                        <TableView layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
+                        <TableView fx:id="tableLinks" layoutX="14.0" layoutY="14.0" prefHeight="307.0" prefWidth="309.0">
+                           <columns>
+                              <TableColumn fx:id="columnIDLink1" prefWidth="86.6666898727417" text="ID Родителя" />
+                              <TableColumn fx:id="columnIDLink2" prefWidth="86.6666898727417" text="ID Ребенка" />
+                              <TableColumn fx:id="columnTypeLink" prefWidth="133.33334859212238" text="Тип связи" />
+                           </columns>
                         </TableView>
+                        <Label layoutX="326.0" layoutY="14.0" text="ID:" />
+                        <TextField fx:id="fieldIDLink" layoutX="393.0" layoutY="12.0" />
+                        <Label layoutX="326.0" layoutY="35.0" text="Тип связи:" AnchorPane.topAnchor="45.0" />
+                        <TextField fx:id="fieldTypeLink" layoutX="393.0" layoutY="41.0" />
+                        <Button fx:id="buttonAddLink" layoutX="551.0" layoutY="12.0" mnemonicParsing="false" onAction="#onButtonAddLinkClick" prefHeight="23.0" prefWidth="69.0" text="Добавить" />
+                        <Button fx:id="buttonDeleteLink" layoutX="552.0" layoutY="41.0" mnemonicParsing="false" onAction="#onButtonDeleteLinkClick" prefHeight="25.0" prefWidth="68.0" text="Удалить" />
                      </children>
                   </AnchorPane>
-            </content>
-          </Tab>
+               </content>
+            </Tab>
             <Tab text="История">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
