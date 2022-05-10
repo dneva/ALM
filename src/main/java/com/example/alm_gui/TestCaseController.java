@@ -74,6 +74,16 @@ public class TestCaseController extends Application {
     TextField fieldIDLink;
     @FXML
     TextField fieldTypeLink;
+    @FXML
+    TableView HistoryTable;
+    @FXML
+    private TableColumn<HistoryItem, Integer> columnIDHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnTimeHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnChangedByHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnStateHistory;
 
     private TestCase testCase;
     private PostgreConnection postgreConnection;
@@ -105,6 +115,7 @@ public class TestCaseController extends Application {
             }
         });
         tableFill();
+        tableHistoryFill();
 
     }
     public void tableFill() {
@@ -113,6 +124,14 @@ public class TestCaseController extends Application {
         columnIDLink2.setCellValueFactory(new PropertyValueFactory<>("Id2"));
         columnTypeLink.setCellValueFactory(new PropertyValueFactory<>("Type"));
         tableLinks.setItems(linkItems);
+    }
+    public void tableHistoryFill(){
+        ObservableList<HistoryItem> historyItems = postgreConnection.getTestCaseHistoryItems(testCase.getId_item());
+        columnIDHistory.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        columnTimeHistory.setCellValueFactory(new PropertyValueFactory<>("Time"));
+        columnChangedByHistory.setCellValueFactory(new PropertyValueFactory<>("Login"));
+        columnStateHistory.setCellValueFactory(new PropertyValueFactory<>("State"));
+        HistoryTable.setItems(historyItems);
     }
     public void initialization(PostgreConnection post,TestCase tc,User u, String fxml, TestPlan tp){
         testCase=tc;
@@ -164,6 +183,7 @@ public class TestCaseController extends Application {
         }
         postgreConnection.updateModifyItem(testCase.getId_item(),df.format(date));
         postgreConnection.insertTestCase(testCase);
+        tableHistoryFill();
     }
     @FXML
     protected void onBackButtonClick(ActionEvent event) throws IOException {

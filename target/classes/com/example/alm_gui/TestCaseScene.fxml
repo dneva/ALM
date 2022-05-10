@@ -208,18 +208,20 @@
                </content>
             </Tab>
             <Tab text="История">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                          </columns>
+                        <TableView fx:id="HistoryTable" layoutX="147.0" layoutY="14.0" prefHeight="311.0" prefWidth="381.0">
+                           <columns>
+                              <TableColumn fx:id="columnIDHistory" prefWidth="75.0" text="ID" />
+                              <TableColumn fx:id="columnTimeHistory" prefWidth="119.3332748413086" text="Время изменеия" />
+                              <TableColumn fx:id="columnChangedByHistory" prefWidth="108.00004577636719" text="Кем изменено" />
+                              <TableColumn fx:id="columnStateHistory" prefWidth="75.0" text="Статус" />
+                           </columns>
                         </TableView>
                      </children>
                   </AnchorPane>
-              </content>
+               </content>
             </Tab>
             <Tab text="GitHub">
                <content>

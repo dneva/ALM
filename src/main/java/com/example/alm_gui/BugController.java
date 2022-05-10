@@ -88,6 +88,16 @@ public class BugController extends Application {
     TextField fieldIDLink;
     @FXML
     TextField fieldTypeLink;
+    @FXML
+    TableView HistoryTable;
+    @FXML
+    private TableColumn<HistoryItem, Integer> columnIDHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnTimeHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnChangedByHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnStateHistory;
 
     private Bug bug;
     private PostgreConnection postgreConnection;
@@ -123,6 +133,7 @@ public class BugController extends Application {
             }
         });
         tableFill();
+        tableHistoryFill();
 
     }
     public void tableFill() {
@@ -131,6 +142,14 @@ public class BugController extends Application {
         columnIDLink2.setCellValueFactory(new PropertyValueFactory<>("Id2"));
         columnTypeLink.setCellValueFactory(new PropertyValueFactory<>("Type"));
         tableLinks.setItems(linkItems);
+    }
+    public void tableHistoryFill(){
+        ObservableList<HistoryItem> historyItems = postgreConnection.getBugHistoryItems(bug.getId_item());
+        columnIDHistory.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        columnTimeHistory.setCellValueFactory(new PropertyValueFactory<>("Time"));
+        columnChangedByHistory.setCellValueFactory(new PropertyValueFactory<>("Login"));
+        columnStateHistory.setCellValueFactory(new PropertyValueFactory<>("State"));
+        HistoryTable.setItems(historyItems);
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -163,6 +182,7 @@ public class BugController extends Application {
         }
         postgreConnection.updateModifyItem(bug.getId_item(),df.format(date));
         postgreConnection.insertBug(bug);
+        tableHistoryFill();
     }
     @FXML
     protected void onBackButtonClick(ActionEvent event) throws IOException {

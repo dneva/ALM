@@ -941,5 +941,133 @@ public class PostgreConnection {
         }
         return id;
     }
+    public ObservableList<HistoryItem> getBugHistoryItems(int id) {
+
+        String SQL = "SELECT * FROM public.\"BugHistoryView\" "+"WHERE id_item = ?";
+        ObservableList<HistoryItem> historyItems = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL))
+        {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                HistoryItem historyItem = new HistoryItem(rs.getInt("id_bug"),
+                        rs.getString("time"),
+                        rs.getString("login"),
+                        rs.getString("state"));
+                historyItems.add(historyItem);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return historyItems;
+    }
+    public ObservableList<HistoryItem> getIssueHistoryItems(int id) {
+
+        String SQL = "SELECT * FROM public.\"IssueHistoryView\" "+"WHERE id_item = ?";
+        ObservableList<HistoryItem> historyItems = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL))
+        {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                HistoryItem historyItem = new HistoryItem(rs.getInt("id_issue"),
+                        rs.getString("time"),
+                        rs.getString("login"),
+                        rs.getString("state"));
+                historyItems.add(historyItem);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return historyItems;
+    }
+    public ObservableList<HistoryItem> getRequirementHistoryItems(int id) {
+
+        String SQL = "SELECT * FROM public.\"RequirementHistoryView\" "+"WHERE id_item = ?";
+        ObservableList<HistoryItem> historyItems = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL))
+        {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                HistoryItem historyItem = new HistoryItem(rs.getInt("id_requirement"),
+                        rs.getString("time"),
+                        rs.getString("login"),
+                        rs.getString("state"));
+                historyItems.add(historyItem);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return historyItems;
+    }
+
+    public ObservableList<HistoryItem> getTaskHistoryItems(int id) {
+
+        String SQL = "SELECT * FROM public.\"TaskHistoryView\" "+"WHERE id_item = ?";
+        ObservableList<HistoryItem> historyItems = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL))
+        {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                HistoryItem historyItem = new HistoryItem(rs.getInt("id_task"),
+                        rs.getString("time"),
+                        rs.getString("login"),
+                        rs.getString("state"));
+                historyItems.add(historyItem);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return historyItems;
+    }
+    public ObservableList<HistoryItem> getTestCaseHistoryItems(int id) {
+
+        String SQL = "SELECT * FROM public.\"TestCaseHistoryView\" "+"WHERE id_item = ?";
+        ObservableList<HistoryItem> historyItems = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL))
+        {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                HistoryItem historyItem = new HistoryItem(rs.getInt("id_case"),
+                        rs.getString("time"),
+                        rs.getString("login"),
+                        rs.getString("state"));
+                historyItems.add(historyItem);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return historyItems;
+    }
+    public ObservableList<HistoryItem> getTestPlanHistoryItems(int id) {
+
+        String SQL = "SELECT * FROM public.\"TestPlanHistoryView\" "+"WHERE id_item = ?";
+        ObservableList<HistoryItem> historyItems = FXCollections.observableArrayList();
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL))
+        {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                HistoryItem historyItem = new HistoryItem(rs.getInt("id_test_plan"),
+                        rs.getString("time"),
+                        rs.getString("login"),
+                        rs.getString("state"));
+                historyItems.add(historyItem);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return historyItems;
+    }
+
 }
 

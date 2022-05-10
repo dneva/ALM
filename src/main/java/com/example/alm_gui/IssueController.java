@@ -61,7 +61,16 @@ public class IssueController {
     TextField fieldIDLink;
     @FXML
     TextField fieldTypeLink;
-
+    @FXML
+    TableView HistoryTable;
+    @FXML
+    private TableColumn<HistoryItem, Integer> columnIDHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnTimeHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnChangedByHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnStateHistory;
     private Issue issue;
     private PostgreConnection postgreConnection;
     private User user;
@@ -83,6 +92,7 @@ public class IssueController {
         fieldPriority.setText(String.valueOf(issue.getPriority()));
         textSteps.setText(issue.getSteps());
         tableFill();
+        tableHistoryFill();
     }
     public void tableFill() {
         ObservableList<LinkItem> linkItems = postgreConnection.getLinkItems(issue.getId_item());
@@ -90,6 +100,14 @@ public class IssueController {
         columnIDLink2.setCellValueFactory(new PropertyValueFactory<>("Id2"));
         columnTypeLink.setCellValueFactory(new PropertyValueFactory<>("Type"));
         tableLinks.setItems(linkItems);
+    }
+    public void tableHistoryFill(){
+        ObservableList<HistoryItem> historyItems = postgreConnection.getIssueHistoryItems(issue.getId_item());
+        columnIDHistory.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        columnTimeHistory.setCellValueFactory(new PropertyValueFactory<>("Time"));
+        columnChangedByHistory.setCellValueFactory(new PropertyValueFactory<>("Login"));
+        columnStateHistory.setCellValueFactory(new PropertyValueFactory<>("State"));
+        HistoryTable.setItems(historyItems);
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -115,6 +133,7 @@ public class IssueController {
         }
         postgreConnection.updateModifyItem(issue.getId_item(),df.format(date));
         postgreConnection.insertIssue(issue);
+        tableHistoryFill();
     }
     @FXML
     protected void onBackButtonClick(ActionEvent event) throws IOException {

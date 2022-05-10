@@ -61,6 +61,16 @@ public class RequirementController {
     TextField fieldIDLink;
     @FXML
     TextField fieldTypeLink;
+    @FXML
+    TableView HistoryTable;
+    @FXML
+    private TableColumn<HistoryItem, Integer> columnIDHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnTimeHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnChangedByHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnStateHistory;
     private Requirement requirement;
     private PostgreConnection postgreConnection;
     private User user;
@@ -82,6 +92,7 @@ public class RequirementController {
         fieldTest.setText(requirement.getTesting_estimate());
         fieldRelease.setText(requirement.getRelease_date());
         tableFill();
+        tableHistoryFill();
     }
     public void tableFill() {
         ObservableList<LinkItem> linkItems = postgreConnection.getLinkItems(requirement.getId_item());
@@ -89,6 +100,14 @@ public class RequirementController {
         columnIDLink2.setCellValueFactory(new PropertyValueFactory<>("Id2"));
         columnTypeLink.setCellValueFactory(new PropertyValueFactory<>("Type"));
         tableLinks.setItems(linkItems);
+    }
+    public void tableHistoryFill(){
+        ObservableList<HistoryItem> historyItems = postgreConnection.getRequirementHistoryItems(requirement.getId_item());
+        columnIDHistory.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        columnTimeHistory.setCellValueFactory(new PropertyValueFactory<>("Time"));
+        columnChangedByHistory.setCellValueFactory(new PropertyValueFactory<>("Login"));
+        columnStateHistory.setCellValueFactory(new PropertyValueFactory<>("State"));
+        HistoryTable.setItems(historyItems);
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -114,6 +133,7 @@ public class RequirementController {
         }
         postgreConnection.updateModifyItem(requirement.getId_item(),df.format(date));
         postgreConnection.insertRequirement(requirement);
+        tableHistoryFill();
     }
     @FXML
     protected void onBackButtonClick(ActionEvent event) throws IOException {

@@ -66,6 +66,16 @@ public class TestPlanController {
     TextField fieldIDLink;
     @FXML
     TextField fieldTypeLink;
+    @FXML
+    TableView HistoryTable;
+    @FXML
+    private TableColumn<HistoryItem, Integer> columnIDHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnTimeHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnChangedByHistory;
+    @FXML
+    private TableColumn<HistoryItem, String> columnStateHistory;
     private TestPlan testPlan;
     private PostgreConnection postgreConnection;
     private User user;
@@ -119,6 +129,7 @@ public class TestPlanController {
             return row;
         });
         tableFill();
+        tableHistoryFill();
 
     }
     public void tableFill() {
@@ -127,6 +138,14 @@ public class TestPlanController {
         columnIDLink2.setCellValueFactory(new PropertyValueFactory<>("Id2"));
         columnTypeLink.setCellValueFactory(new PropertyValueFactory<>("Type"));
         tableLinks.setItems(linkItems);
+    }
+    public void tableHistoryFill(){
+        ObservableList<HistoryItem> historyItems = postgreConnection.getTestPlanHistoryItems(testPlan.getId_item());
+        columnIDHistory.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        columnTimeHistory.setCellValueFactory(new PropertyValueFactory<>("Time"));
+        columnChangedByHistory.setCellValueFactory(new PropertyValueFactory<>("Login"));
+        columnStateHistory.setCellValueFactory(new PropertyValueFactory<>("State"));
+        HistoryTable.setItems(historyItems);
     }
     @FXML
     protected void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -155,7 +174,7 @@ public class TestPlanController {
         {
             postgreConnection.updateExecutionTest(postgreConnection.findPlanCase(testPlan.getId_item(),tci.getId_item()).getId(),tci.getExecution());
         }
-
+        tableHistoryFill();
 
 
     }
