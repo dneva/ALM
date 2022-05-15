@@ -1068,6 +1068,25 @@ public class PostgreConnection {
         }
         return historyItems;
     }
+    public int countReqs(int month, int year){
+        String SQL = "SELECT * FROM countReqs (?, ?)";
+        int result = 0;
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = connection.prepareStatement(SQL)) {
+
+            pstmt.setInt(1,month);
+            pstmt.setInt(2,year);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                result = rs.getInt("countreqs");
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
 
 }
 

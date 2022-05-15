@@ -33,6 +33,7 @@ public class LoginController {
             MainController mainController = loader.getController();
             mainController.helloTitle(user);
             mainController.tableFill(postgreConnection);
+            mainController.chartsInit(postgreConnection);
 
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);

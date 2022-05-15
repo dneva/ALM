@@ -2,6 +2,7 @@ package com.example.alm_gui;
 
 import com.example.alm_gui.Classes.*;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -45,7 +50,12 @@ public class MainController implements Initializable {
     private ChoiceBox<String> itemChoiceBox;
     @FXML
     private Button createButton;
-
+    @FXML
+    private TextField filterInput;
+    @FXML
+    private ChoiceBox<Integer> choiceYear;
+    @FXML
+    private BarChart<String, Integer> barReqs;
     public void helloTitle(User u) {
         user = u;
         nameLabel.setText("Добро пожаловать, " + user.getLogin());
@@ -61,7 +71,17 @@ public class MainController implements Initializable {
         type.setCellValueFactory(new PropertyValueFactory<>("Type"));
         status.setCellValueFactory(new PropertyValueFactory<>("State"));
         assign.setCellValueFactory(new PropertyValueFactory<>("Assign"));
-        mainTable.setItems(mainItems);
+        FilteredList<MainItem> filteredItems = new FilteredList<>(mainItems, s -> true);
+        filterInput.textProperty().addListener(obs->{
+            String filter = filterInput.getText();
+            if(filter == null || filter.length() == 0) {
+                filteredItems.setPredicate(s -> true);
+            }
+            else {
+                filteredItems.setPredicate(s -> s.contains(filter));
+            }
+        });
+        mainTable.setItems(filteredItems);
         onTableDoubleClick();
 
     }
@@ -178,6 +198,43 @@ public class MainController implements Initializable {
         String[] items = {"Requirement", "Bug", "Issue", "Task", "Test Case", "Test Plan"};
         itemChoiceBox.getItems().addAll(items);
         itemChoiceBox.setValue("Requirement");
+
+        Integer[] years = {2022};
+        choiceYear.getItems().addAll(years);
+        choiceYear.setValue(2022);
+
+
+    }
+
+    @FXML
+    public void chartsInit(PostgreConnection post){
+        postgreConnection = post;
+        barReqs.setTitle("Выполнено требований за год");
+        CategoryAxis xaxis= new CategoryAxis();
+        NumberAxis yaxis = new NumberAxis();
+        xaxis.setLabel("Месяц");
+        yaxis.setLabel("Выполнено требований");
+
+        XYChart.Series<String,Integer> series = new XYChart.Series<>();
+
+        series.getData().add(new XYChart.Data("Январь",postgreConnection.countReqs(1,choiceYear.getValue())));
+        System.out.println(postgreConnection.countReqs(1,choiceYear.getValue()));
+        series.getData().add(new XYChart.Data("Февраль",postgreConnection.countReqs(2,choiceYear.getValue())));
+        series.getData().add(new XYChart.Data("Март",postgreConnection.countReqs(3,choiceYear.getValue())));
+        series.getData().add(new XYChart.Data("Апрель",postgreConnection.countReqs(4,choiceYear.getValue())));
+
+        series.getData().add(new XYChart.Data("Май",postgreConnection.countReqs(5,choiceYear.getValue())));
+        series.getData().add(new XYChart.Data("Июнь",postgreConnection.countReqs(6,choiceYear.getValue())));
+        series.getData().add(new XYChart.Data("Июль",postgreConnection.countReqs(7,choiceYear.getValue())));
+        series.getData().add(new XYChart.Data("Август",postgreConnection.countReqs(8,choiceYear.getValue())));
+
+        series.getData().add(new XYChart.Data("Сентябрь",postgreConnection.countReqs(9,choiceYear.getValue())));
+        series.getData().add(new XYChart.Data("Октябрь",postgreConnection.countReqs(10,choiceYear.getValue())));
+        series.getData().add(new XYChart.Data("Ноябрь",postgreConnection.countReqs(11,choiceYear.getValue())));
+        series.getData().add(new XYChart.Data("Декабрь",postgreConnection.countReqs(12,choiceYear.getValue())));
+
+        barReqs.getData().add(series);
+        barReqs.setLegendVisible(false);
 
     }
 

@@ -55,7 +55,7 @@ public class TaskController extends Application {
     @FXML
     TextField fieldGitUser;
     @FXML
-    TextField fieldGitPassword;
+    PasswordField fieldGitPassword;
     @FXML
     ChoiceBox<String> choiceBoxRepository;
     @FXML
@@ -169,6 +169,7 @@ public class TaskController extends Application {
         MainController mainController = loader.getController();
         mainController.helloTitle(user);
         mainController.tableFill(postgreConnection);
+        mainController.chartsInit(postgreConnection);
 
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -185,6 +186,7 @@ public class TaskController extends Application {
         MainController mainController = loader.getController();
         mainController.helloTitle(user);
         mainController.tableFill(postgreConnection);
+        mainController.chartsInit(postgreConnection);
 
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);

@@ -77,5 +77,19 @@ public class MainItem {
     public String getType() {
         return type.get();
     }
+    public boolean contains(String s)
+    {
+        boolean result = false;
+        if (String.valueOf(id.get()).contains(s)) result=true;
+        else if (title.get().contains(s)) result=true;
+        else if (time_create.get().contains(s)) result=true;
+        else if (modify_item.get().contains(s)) result=true;
+        else if (type.get().contains(s)) result=true;
+        else if (state.get().contains(s)) result=true;
+        else if (assign.get().contains(s)) result=true;
+
+        return result;
+
+    }
 
 }
