@@ -164,9 +164,12 @@ public class TestPlanController {
         {
             Item item = new Item(df.format(date),6,df.format(date));
             testPlan.setId_item((int)postgreConnection.insertItem(item));
+            labelId_requirement.setText("ID: "+String.valueOf(testPlan.getId_item()));
         }
         postgreConnection.updateModifyItem(testPlan.getId_item(),df.format(date));
         postgreConnection.insertTestPlan(testPlan);
+        fieldTime.setText("Изменено "+ testPlan.getTime());
+        fieldChanged.setText(postgreConnection.findUser(testPlan.getChanged_by()).getLogin());
 
         testCaseItems = tableCases.getItems();
 

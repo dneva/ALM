@@ -58,7 +58,7 @@
                                           <Insets left="10.0" />
                                        </padding>
                                     </Label>
-                                    <TextArea fx:id="textSteps" prefHeight="318.0" prefWidth="355.0" wrapText="true">
+                                    <TextArea fx:id="textSteps" prefHeight="318.0" prefWidth="355.0" text="1.&#10;2.&#10;-----------------------------------------------------------------&#10;Ожидаемый результат:&#10;" wrapText="true">
                                        <VBox.margin>
                                           <Insets left="5.0" />
                                        </VBox.margin>

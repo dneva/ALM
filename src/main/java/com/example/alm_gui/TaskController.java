@@ -157,9 +157,12 @@ public class TaskController extends Application {
         {
             Item item = new Item(df.format(date),4,df.format(date));
             task.setId_item((int)postgreConnection.insertItem(item));
+            labelId_requirement.setText("ID: "+String.valueOf(task.getId_item()));
         }
         postgreConnection.updateModifyItem(task.getId_item(),df.format(date));
         postgreConnection.insertTask(task);
+        fieldTime.setText("Изменено "+ task.getTime());
+        fieldChanged.setText(postgreConnection.findUser(task.getChanged_by()).getLogin());
         tableHistoryFill();
     }
     @FXML

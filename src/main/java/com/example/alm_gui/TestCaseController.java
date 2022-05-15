@@ -180,9 +180,12 @@ public class TestCaseController extends Application {
         {
             Item item = new Item(df.format(date),5,df.format(date));
             testCase.setId_item((int)postgreConnection.insertItem(item));
+            labelId_requirement.setText("ID: "+String.valueOf(testCase.getId_item()));
         }
         postgreConnection.updateModifyItem(testCase.getId_item(),df.format(date));
         postgreConnection.insertTestCase(testCase);
+        fieldTime.setText("Изменено "+ testCase.getTime());
+        fieldChanged.setText(postgreConnection.findUser(testCase.getChanged_by()).getLogin());
         tableHistoryFill();
     }
     @FXML

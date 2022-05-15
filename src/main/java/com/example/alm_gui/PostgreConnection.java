@@ -1087,6 +1087,51 @@ public class PostgreConnection {
         }
         return result;
     }
+    public int getTestResultsPass(){
+        String SQL = "SELECT count(*) FROM public.plan_case WHERE execution = 'Пройден'";
+        int result = 0;
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(SQL)) {
+
+            while (rs.next()) {
+                result = rs.getInt("count");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    public int getTestResultsNotPass(){
+        String SQL = "SELECT count(*) FROM public.plan_case WHERE execution = 'Не пройден'";
+        int result = 0;
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(SQL)) {
+
+            while (rs.next()) {
+                result = rs.getInt("count");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
+    public int getTestResultsFail(){
+        String SQL = "SELECT count(*) FROM public.plan_case WHERE execution = 'Провален'";
+        int result = 0;
+        try (Connection connection = DriverManager.getConnection(url,user,password);
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(SQL)) {
+
+            while (rs.next()) {
+                result = rs.getInt("count");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return result;
+    }
 
 }
 

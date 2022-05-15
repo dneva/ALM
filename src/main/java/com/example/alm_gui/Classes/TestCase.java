@@ -12,7 +12,7 @@ public class TestCase {
     private String version;
     private String state;
     private int assign;
-    public TestCase(){this.id_item=0;}
+    public TestCase(){this.id_item=0; this.steps="1.\n2.\n-----------------------------------------------------------------\nОжидаемый результат:\n";}
     public TestCase(int id_item, String steps, int priority, String auto_status, String dev, String time, int changed_by, String title, String version,
                     String state, int assign){
         this.id_item = id_item;

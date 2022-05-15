@@ -1,6 +1,7 @@
 package com.example.alm_gui;
 
 import com.example.alm_gui.Classes.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -10,10 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -56,6 +54,8 @@ public class MainController implements Initializable {
     private ChoiceBox<Integer> choiceYear;
     @FXML
     private BarChart<String, Integer> barReqs;
+    @FXML
+    private PieChart pieTest;
     public void helloTitle(User u) {
         user = u;
         nameLabel.setText("Добро пожаловать, " + user.getLogin());
@@ -235,6 +235,15 @@ public class MainController implements Initializable {
 
         barReqs.getData().add(series);
         barReqs.setLegendVisible(false);
+
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
+                new PieChart.Data("Провален", postgreConnection.getTestResultsFail()),
+                new PieChart.Data("Не пройден", postgreConnection.getTestResultsNotPass()),
+                new PieChart.Data("Пройден", postgreConnection.getTestResultsPass())
+
+
+        );
+        pieTest.setData(data);
 
     }
 

@@ -130,9 +130,12 @@ public class IssueController {
         {
             Item item = new Item(df.format(date),3,df.format(date));
             issue.setId_item((int)postgreConnection.insertItem(item));
+            labelId_requirement.setText("ID: "+String.valueOf(issue.getId_item()));
         }
         postgreConnection.updateModifyItem(issue.getId_item(),df.format(date));
         postgreConnection.insertIssue(issue);
+        fieldChanged.setText(postgreConnection.findUser(issue.getChanged_by()).getLogin());
+        fieldTime.setText("Изменено "+ issue.getTime());
         tableHistoryFill();
     }
     @FXML

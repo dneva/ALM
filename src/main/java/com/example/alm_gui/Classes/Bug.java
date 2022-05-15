@@ -22,6 +22,7 @@ public class Bug {
     private int assign;
     public Bug(){
         this.id_item=0;
+        this.steps="1.\n2.\nОжидаемый результат:\nФактический результат:\n";
     };
     public Bug(int id_item,String steps, String environment, String found_build, String integreted_build,
     String os_ver, String verified, String dev, String how_found, String localization, int priority, int severity,

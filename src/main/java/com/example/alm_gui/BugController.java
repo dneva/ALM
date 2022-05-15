@@ -179,9 +179,12 @@ public class BugController extends Application {
         {
             Item item = new Item(df.format(date),2,df.format(date));
             bug.setId_item((int)postgreConnection.insertItem(item));
+            labelId_requirement.setText("ID: "+String.valueOf(bug.getId_item()));
         }
         postgreConnection.updateModifyItem(bug.getId_item(),df.format(date));
         postgreConnection.insertBug(bug);
+        fieldChanged.setText(postgreConnection.findUser(bug.getChanged_by()).getLogin());
+        fieldTime.setText("Изменено "+ bug.getTime());
         tableHistoryFill();
     }
     @FXML

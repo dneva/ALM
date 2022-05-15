@@ -130,9 +130,12 @@ public class RequirementController {
         {
             Item item = new Item(df.format(date),1,df.format(date));
             requirement.setId_item((int)postgreConnection.insertItem(item));
+            labelId_requirement.setText("ID: "+String.valueOf(requirement.getId_item()));
         }
         postgreConnection.updateModifyItem(requirement.getId_item(),df.format(date));
         postgreConnection.insertRequirement(requirement);
+        fieldTime.setText("Изменено "+ requirement.getTime());
+        fieldChanged.setText(postgreConnection.findUser(requirement.getChanged_by()).getLogin());
         tableHistoryFill();
     }
     @FXML
